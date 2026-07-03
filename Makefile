@@ -1,14 +1,21 @@
-.PHONY: build run clean
+.PHONY: build run clean test
 
-SRC = lox
-OUT = lox.jar
+JAVAC = javac
+JAVA  = java
+SRC   = lox
+OUT   = lox.jar
+
+FLAGS = -Xlint:all -g
 
 build:
-	@javac -d build/classes -sourcepath $(SRC) $(SRC)/*.java
+	@$(JAVAC) $(FLAGS) -d build/classes -sourcepath $(SRC) $(SRC)/*.java
 	@cd build/classes && jar cfe ../../$(OUT) lox.Lox .
 
 run: build
-	@java -jar $(OUT)
+	@$(JAVA) -jar $(OUT)
+
+test: build
+	@$(JAVA) -jar $(OUT) test.lox 2>/dev/null || true
 
 clean:
-	@rm -rf build/classes build/classes $(OUT)
+	@rm -rf build/classes $(OUT)
